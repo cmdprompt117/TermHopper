@@ -1,2 +1,2 @@
 # TermHopper
-Terminal-based platformer / puzzle game where you manipulate your world entirely with text.
+Platformer / puzzle game built on the Bevy Engine where you manipulate the world around you with text
