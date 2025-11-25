@@ -7,9 +7,9 @@ use term_hopper::{
 };
 
 //
-/// Contains general level data read from a .txt descriptor file
+/// Contains general scene data read from a .txt descriptor file
 /// 
-pub struct Level {
+pub struct Scene {
     // Visual map
     map: String,
     // General info
@@ -20,7 +20,7 @@ pub struct Level {
     pub solid: Vec<char>,
 }
 
-// LEVEL FILE STRUCTURE:
+// SCENE FILE STRUCTURE:
 
 //
 // map data map data map data map data
@@ -36,31 +36,31 @@ pub struct Level {
 // solid ... ... ... ...
 //
 
-impl Level {
+impl Scene {
     ///
-    /// Load a level from file
+    /// Load a scene from file
     /// 
     /// TODO replace panics with game error handling system when it exists
     /// 
-    pub fn load_from(file_path: String) -> Level {
+    pub fn load_from(file_path: String) -> Scene {
         let file_data = fs::read_to_string(&file_path);
         if file_data.is_err() {
-            panic!("Could not read level from path: {}", file_path);
+            panic!("Could not read Scene from path: {}", file_path);
         }
         let file_data = file_data.unwrap();
-        // Validate level data format
-        let level_info: Vec<&str> = file_data.split("INFO").collect();
-        if level_info.len() != 2 {
-            panic!("Invalid level data format: INFO tag appears multiple times");
+        // Validate scene data format
+        let scene_info: Vec<&str> = file_data.split("INFO").collect();
+        if scene_info.len() != 2 {
+            panic!("Invalid scene data format: INFO tag appears multiple times");
         }
         // Get map visuals
-        let visual_map = level_info[0].trim();
+        let visual_map = scene_info[0].trim();
         print_flush("map:\n");
         print_flush(visual_map);
         // Get map settings
-        let settings: Vec<&str> = level_info[1].split('\n').collect();
+        let settings: Vec<&str> = scene_info[1].split('\n').collect();
         print_flush("\nsettings:\n");
-        print_flush(level_info[1]);
+        print_flush(scene_info[1]);
         let mut size: Option<(u16, u16)> = None;
         let mut start: Option<(u16, u16)> = None;
         let mut solid: Option<Vec<char>> = None;
@@ -71,10 +71,10 @@ impl Level {
                     let x = split_line[1].parse::<u16>();
                     let y = split_line[2].parse::<u16>();
                     if x.is_err() {
-                        panic!("Invalid level data format: size.0 invalid");
+                        panic!("Invalid scene data format: size.0 invalid");
                     }
                     if y.is_err() {
-                        panic!("Invalid level data format: size.1 invalid");
+                        panic!("Invalid scene data format: size.1 invalid");
                     }
                     // print_flush(format!("size = {},{}", x.clone().unwrap(), y.clone().unwrap()));
                     size = Some((x.unwrap(), y.unwrap()));
@@ -83,10 +83,10 @@ impl Level {
                     let x = split_line[1].parse::<u16>();
                     let y = split_line[2].parse::<u16>();
                     if x.is_err() {
-                        panic!("Invalid level data format: start.0 invalid");
+                        panic!("Invalid scene data format: start.0 invalid");
                     }
                     if y.is_err() {
-                        panic!("Invalid level data format: start.1 invalid");
+                        panic!("Invalid scene data format: start.1 invalid");
                     }
                     // print_flush(format!("start = {},{}", x.clone().unwrap(), y.clone().unwrap()));
                     start = Some((x.unwrap(), y.unwrap()));
@@ -98,23 +98,23 @@ impl Level {
                         chars.push(split_line[i].chars().into_iter().next().unwrap());
                     }
                     if chars.len() == 0 {
-                        panic!("Invalid level data format: No solid chars defined");
+                        panic!("Invalid scene data format: No solid chars defined");
                     }
                     solid = Some(chars);
                 }
                 _ => {
                     if split_line[0] != " " && split_line[0] != "" && split_line[0] != "\n" {
-                        panic!("Invalid level data setting: {}", split_line[0]);
+                        panic!("Invalid scene data setting: {}", split_line[0]);
                     }
                 }
             }
         }
         // Make sure all necessary settings were set
         if !size.is_some() || !start.is_some() || !solid.is_some() {
-            panic!("Invalid level data format: Missing one of the necessary settings:\n- size\n- start\n- solid list");
+            panic!("Invalid scene data format: Missing one of the necessary settings:\n- size\n- start\n- solid list");
         }
-        // Return the new level
-        Level {
+        // Return the new scene
+        Scene {
             map: visual_map.to_owned(),
             size: size.unwrap(),
             player_start: start.unwrap(),
@@ -125,7 +125,7 @@ impl Level {
 }
 
 // Map data parsing
-impl Level {
+impl Scene {
     ///
     /// Determine whether the tile at a requested coord is solid
     /// 
@@ -150,9 +150,9 @@ impl Level {
 }
 
 // Visualization
-impl Level {
+impl Scene {
     ///
-    /// Prints the Level's `map` data
+    /// Prints the Scene's `map` data
     /// 
     pub fn display(&self) {
         cls();

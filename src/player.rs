@@ -3,7 +3,7 @@ use crossterm::event::KeyCode;
 use std::io::stdout;
 
 use term_hopper::print_flush;
-use crate::Level;
+use crate::Scene;
 
 #[derive(PartialEq)]
 pub enum Direction {
@@ -45,39 +45,39 @@ impl Player {
     ///
     /// Move the player and turn sprite based on input
     /// 
-    pub fn move_player(&mut self, level: &Level, input: KeyCode) {
+    pub fn move_player(&mut self, scene: &Scene, input: KeyCode) {
         match input {
             KeyCode::Up => {
-                if !level.is_solid(self.x, self.y - 1) {
+                if !scene.is_solid(self.x, self.y - 1) {
                     execute!(stdout(), MoveTo(self.x, self.y)).ok();
-                    print_flush(level.get_char(self.x, self.y));
+                    print_flush(scene.get_char(self.x, self.y));
                     self.y -= 1;
                     self.display();
                 }
                 self.turn(Direction::North);
             }
             KeyCode::Right => {
-                if !level.is_solid(self.x + 1, self.y) {
+                if !scene.is_solid(self.x + 1, self.y) {
                     execute!(stdout(), MoveTo(self.x, self.y)).ok();
-                    print_flush(level.get_char(self.x, self.y));
+                    print_flush(scene.get_char(self.x, self.y));
                     self.x += 1;
                     self.display();
                 }
                 self.turn(Direction::East);
             }
             KeyCode::Down => {
-                if !level.is_solid(self.x, self.y + 1) {
+                if !scene.is_solid(self.x, self.y + 1) {
                     execute!(stdout(), MoveTo(self.x, self.y)).ok();
-                    print_flush(level.get_char(self.x, self.y));
+                    print_flush(scene.get_char(self.x, self.y));
                     self.y += 1;
                     self.display();
                 }
                 self.turn(Direction::South);
             }
             KeyCode::Left => {
-                if !level.is_solid(self.x - 1, self.y) {
+                if !scene.is_solid(self.x - 1, self.y) {
                     execute!(stdout(), MoveTo(self.x, self.y)).ok(); 
-                    print_flush(level.get_char(self.x, self.y));
+                    print_flush(scene.get_char(self.x, self.y));
                     self.x -= 1;
                     self.display();
                 }
