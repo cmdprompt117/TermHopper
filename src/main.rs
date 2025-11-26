@@ -8,10 +8,8 @@ use std::io::stdout;
 mod player;
 mod scene;
 mod data;
+mod room;
 
-use player::{
-    Player// , Direction
-};
 use scene::{
     Scene
 };
@@ -31,11 +29,7 @@ pub enum GameState {
 /// 
 pub struct GameController {
     state: GameState,             // The current game state
-    data: SaveData,               // The instance of the [;ayer's save data
-    current_scene: Option<Scene>, // The current scene, read in from .json
-                                  // The scene is responsible for the visual representation of the map and tracking its data
-                                  // The controller checks player inputs against the Scene's loaded data
-    player: Option<Player>,       // The player in the current scene
+    data: SaveData,               // The instance of the player's save data
 }
 
 impl GameController {
@@ -47,15 +41,39 @@ impl GameController {
         GameController {
             state: GameState::Menu("Main".to_owned()),
             data: save,
-            current_scene: None,
-            player: None,
         }
     }
     /// 
     /// Handles the macro execution loop of the game.
     /// NOTICE: Calling this command when the GameState is already a Scene will break things.
     /// 
-    pub fn run(&self) -> Result<(), std::io::Error> {
+    pub fn run(&mut self) -> Result<(), std::io::Error> {
+        //         v---------+
+        // Main menu -> exit |
+        //  \/ /\            | 
+        // Level select      |
+        // \/                |   
+        // Gameplay ---------+
+        //
+        loop {
+            match &self.state {
+                GameState::Menu(menu_name) => {
+                    match menu_name.as_str() {
+                        "Main" => {
+                            self.main_menu();
+                        }
+                        _ => { }
+                    }
+                }
+                GameState::Scene(scene_name) => {
+                    let mut scene = Scene::load_from(scene_name.to_owned());
+                    scene.play();
+                }
+                GameState::Shutdown => {
+                    break;
+                }
+            }
+        }
 
         return Ok(());
     }
@@ -63,14 +81,12 @@ impl GameController {
 
 // Menus
 impl GameController {
+    ///
+    /// Displays and runs the main menu
+    /// 
     pub fn main_menu(&mut self) {
 
     }
-}
-
-// Game loop
-impl GameController {
-
 }
 
 fn main() -> Result<(), std::io::Error> {

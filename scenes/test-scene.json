@@ -1,0 +1,32 @@
+{
+    "Middle": {
+        "tilemap": "tilemaps\\test-mid.txt",
+        "transitions": [
+
+        ]
+    },
+    "Right": {
+        "tilemap": "tilemaps\\test-right.txt",
+        "transitions": [
+            
+        ]
+    },
+    "Bottom": {
+        "tilemap": "tilemaps\\test-bottom.text",
+        "transitions": [
+
+        ]
+    },
+    "Left": {
+        "tilemap": "tilemaps\\test-left.txt",
+        "transitions": [
+
+        ]
+    },
+    "Top": {
+        "tilemap": "tilemaps\\test-top.txt",
+        "transitions": [
+
+        ]
+    }
+}

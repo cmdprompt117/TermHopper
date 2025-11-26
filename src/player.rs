@@ -46,51 +46,13 @@ impl Player {
     /// Move the player and turn sprite based on input
     /// 
     pub fn move_player(&mut self, scene: &Scene, input: KeyCode) {
-        match input {
-            KeyCode::Up => {
-                if !scene.is_solid(self.x, self.y - 1) {
-                    execute!(stdout(), MoveTo(self.x, self.y)).ok();
-                    print_flush(scene.get_char(self.x, self.y));
-                    self.y -= 1;
-                    self.display();
-                }
-                self.turn(Direction::North);
-            }
-            KeyCode::Right => {
-                if !scene.is_solid(self.x + 1, self.y) {
-                    execute!(stdout(), MoveTo(self.x, self.y)).ok();
-                    print_flush(scene.get_char(self.x, self.y));
-                    self.x += 1;
-                    self.display();
-                }
-                self.turn(Direction::East);
-            }
-            KeyCode::Down => {
-                if !scene.is_solid(self.x, self.y + 1) {
-                    execute!(stdout(), MoveTo(self.x, self.y)).ok();
-                    print_flush(scene.get_char(self.x, self.y));
-                    self.y += 1;
-                    self.display();
-                }
-                self.turn(Direction::South);
-            }
-            KeyCode::Left => {
-                if !scene.is_solid(self.x - 1, self.y) {
-                    execute!(stdout(), MoveTo(self.x, self.y)).ok(); 
-                    print_flush(scene.get_char(self.x, self.y));
-                    self.x -= 1;
-                    self.display();
-                }
-                self.turn(Direction::West);
-            }
-            _ => { }
-        }
+        todo!();
     }
     /// 
     /// Handle the player typing a command
     /// 
     pub fn handle_typing(&self, new_char: char) {
-        // TODO
+        todo!();
     }
 }
 
