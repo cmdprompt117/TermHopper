@@ -1,11 +1,12 @@
 use crossterm::execute; use crossterm::cursor::MoveTo;
 use crossterm::event::KeyCode;
 use std::io::stdout;
+use serde::{Serialize, Deserialize};
 
 use term_hopper::print_flush;
-use crate::Scene;
+use crate::room::{Room, TransitionInfo};
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Serialize, Deserialize)]
 pub enum Direction {
     North,
     East,
@@ -13,6 +14,7 @@ pub enum Direction {
     West
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct Player {
     pub facing: Direction,
     pub x: u16,
@@ -22,17 +24,6 @@ pub struct Player {
 }
 
 impl Player {
-    ///
-    /// Create new instance
-    /// 
-    pub fn new(start_dir: Direction, start_pos: (u16, u16)) -> Player {
-        Player {
-            facing: start_dir,
-            x: start_pos.0,
-            y: start_pos.1,
-            is_typing: false
-        }
-    }
     ///
     /// Update character direction. Display accordingly
     /// 
@@ -45,13 +36,64 @@ impl Player {
     ///
     /// Move the player and turn sprite based on input
     /// 
-    pub fn move_player(&mut self, scene: &Scene, input: KeyCode) {
-        todo!();
+    pub fn move_player(&mut self, room: &Room, input: KeyCode) -> Option<TransitionInfo> {
+        match input {
+            KeyCode::Up => {
+                self.turn(Direction::North);
+                // Check collision
+                if !room.is_solid(self.x, self.y + 1) {
+                    self.y += 1;
+                    self.display();
+                }
+                // Check if we have hit a transition
+                if room.is_transition(self.x,self.y) {
+                    return Some(room.get_transition_info(self.x, self.y));
+                }
+            }
+            KeyCode::Down => {
+                self.turn(Direction::South);
+                // Check collision
+                if !room.is_solid(self.x, self.y - 1) {
+                    self.y -= 1;
+                    self.display();
+                }
+                // Check if we have hit a transition
+                if room.is_transition(self.x,self.y) {
+                    return Some(room.get_transition_info(self.x, self.y));
+                }
+            }
+            KeyCode::Right => {
+                self.turn(Direction::East);
+                // Check collision
+                if !room.is_solid(self.x + 1, self.y) {
+                    self.x += 1;
+                    self.display();
+                }
+                // Check if we have hit a transition
+                if room.is_transition(self.x,self.y) {
+                    return Some(room.get_transition_info(self.x, self.y));
+                }
+            }
+            KeyCode::Left => {
+                self.turn(Direction::West);
+                // Check collision
+                if !room.is_solid(self.x - 1, self.y) {
+                    self.x -= 1;
+                    self.display();
+                }
+                // Check if we have hit a transition
+                if room.is_transition(self.x,self.y) {
+                    return Some(room.get_transition_info(self.x, self.y));
+                }
+            }
+            _ => { panic!("Unknown keycode being handled by player.move_input() - {}", input); }
+        }
+        return None;
     }
     /// 
     /// Handle the player typing a command
     /// 
-    pub fn handle_typing(&self, new_char: char) {
+    pub fn handle_typing(&self, _new_char: char) {
         todo!();
     }
 }

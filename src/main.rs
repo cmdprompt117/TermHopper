@@ -13,9 +13,9 @@ mod room;
 use scene::{
     Scene
 };
-use data::{
-    SaveData,
-};
+// use data::{
+//     SaveData,
+// };
 
 #[derive(PartialEq)]
 pub enum GameState {
@@ -29,7 +29,8 @@ pub enum GameState {
 /// 
 pub struct GameController {
     state: GameState,             // The current game state
-    data: SaveData,               // The instance of the player's save data
+    // TODO implement SaveData system
+    // data: SaveData,               // The instance of the player's save data
 }
 
 impl GameController {
@@ -37,10 +38,11 @@ impl GameController {
     /// Creates a new instance of the game controller
     /// 
     pub fn new() -> GameController {
-        let save = SaveData::load();
+        // let save = SaveData::load();
         GameController {
             state: GameState::Menu("Main".to_owned()),
-            data: save,
+            // TODO implement SaveData system
+            // data: save,
         }
     }
     /// 
@@ -67,7 +69,7 @@ impl GameController {
                 }
                 GameState::Scene(scene_name) => {
                     let mut scene = Scene::load_from(scene_name.to_owned());
-                    scene.play();
+                    let _ = scene.play();
                 }
                 GameState::Shutdown => {
                     break;
@@ -85,7 +87,7 @@ impl GameController {
     /// Displays and runs the main menu
     /// 
     pub fn main_menu(&mut self) {
-
+        self.state = GameState::Scene(r"scenes/test-scene.json".to_owned());
     }
 }
 
@@ -99,62 +101,3 @@ fn main() -> Result<(), std::io::Error> {
     execute!(stdout(), Show)?;
     return res;
 }
-
-    // Load scene data and show scene
-//     let scene = Scene::load_from("scenes\\test-bed.txt".to_owned());
-//     scene.display();
-
-    // Create and display player
-//     let mut player = Player::new(Direction::North, scene.player_start);
-//     player.display();
-
-    // Input loop
-//     loop {
-//         if event::poll(Duration::from_millis(500))? {
-//             match event::read()? {
-//                 Event::Key(key) => {
-//                     if key.is_press() {
-//                         match key.code {
-//                             KeyCode::Char(c) => {
-//                                 if player.is_typing {
-//                                     player.handle_typing(c);
-//                                 } else {
-//                                     player.is_typing = true;
-//                                     player.handle_typing(c);
-//                                 }
-//                             }
-//                             KeyCode::Enter => {
-//                                 if player.is_typing {
-//                                     player.is_typing = false;
-//                                 } else {
-                                    // TODO Use enter as key to enter rooms?
-//                                 }
-//                             }
-//                             KeyCode::Esc => { break; }
-//                             KeyCode::Up | KeyCode::Down | KeyCode::Right | KeyCode::Left => {
-//                                 player.move_player(&scene, key.code);
-//                             }
-//                             _ => { }
-//                         }
-//                     }
-//                 }
-//                 Event::Resize(x, y) => {
-                    // TODO determine min screen size by scene size
-                    // TODO and handle re-printing the screen when the needed size is met
-//                     if x < 20 || y < 20 {
-//                         execute!(stdout(), MoveTo(0, 0))?;
-//                         term_hopper::cls();
-//                         println!("Please resize your terminal to at least 20x20.");
-//                     }
-//                 }
-//                 _ => { }
-//             }
-//         }
-//     }
-
-    // Cleanup
-//     execute!(stdout(), Show)?;
-//     cls();
-//     execute!(stdout(), MoveTo(0, 0))?;
-//     Ok(())
-// }

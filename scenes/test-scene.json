@@ -1,32 +1,49 @@
 {
-    "Middle": {
-        "tilemap": "tilemaps\\test-mid.txt",
-        "transitions": [
+    "room_map": {
+        "middle": {
+            "tilemap": "",
+            "transitions": {
 
-        ]
-    },
-    "Right": {
-        "tilemap": "tilemaps\\test-right.txt",
-        "transitions": [
-            
-        ]
-    },
-    "Bottom": {
-        "tilemap": "tilemaps\\test-bottom.text",
-        "transitions": [
+            },
+            "solid_tiles": ["█", "▌", "▐"]
+        },
+        "top": {
+            "tilemap": "",
+            "transitions": {
 
-        ]
-    },
-    "Left": {
-        "tilemap": "tilemaps\\test-left.txt",
-        "transitions": [
+            },
+            "solid_tiles": ["█", "▌", "▐"]
+        },
+        "right": {
+            "tilemap": "",
+            "transitions": {
 
-        ]
-    },
-    "Top": {
-        "tilemap": "tilemaps\\test-top.txt",
-        "transitions": [
+            },
+            "solid_tiles": ["█", "▌", "▐"]
+        },
+        "bottom": {
+            "tilemap": "",
+            "transitions": {
 
-        ]
+            },
+            "solid_tiles": ["█", "▌", "▐"]
+        },
+        "left": {
+            "tilemap": "",
+            "transitions": {
+
+            },
+            "solid_tiles": ["█", "▌", "▐"]
+        }
+    },
+    "current_room": {
+        "tilemap": "",
+        "transitions": {
+
+        },
+        "solid_tiles": ["█", "▌", "▐"]
+    },
+    "player": {
+
     }
 }
